@@ -2,7 +2,7 @@
    - Cabecera con fondo al hacer scroll.
    - Aparición suave de bloques (.revela).
    - Pestañas de «Ejemplos» accesibles (flechas, Inicio/Fin, enlace directo #ejemplo-…).
-   - Conversaciones que se reproducen solas cuando se ven; lo que dependa de un mensaje (data-tras="id") se activa cuando ese mensaje aparece.
+   - Conversaciones completas en reposo que se reproducen solas al verse; lo que dependa de un mensaje (data-tras="id") se activa cuando ese mensaje aparece.
    Con «movimiento reducido» del sistema, o con ?estatico en la dirección, todo se muestra ya terminado. */
 (() => {
   'use strict';
@@ -34,14 +34,17 @@
   }
 
   /* ---------- conversaciones ---------- */
+  // En reposo cada conversación se ve COMPLETA (quien no baja, una miniatura o un enlace compartido la ven entera).
+  // Justo antes de entrar en pantalla se vacía (fuera de la vista) y, al verse, se reproduce una vez. «Ver otra vez» la repite.
   class Conversacion {
     constructor(panel) {
       this.panel = panel;
+      this.telefono = panel.querySelector('.telefono');
       this.cuerpo = panel.querySelector('.chat__cuerpo');
       this.mensajes = [...panel.querySelectorAll('.msg')];
       this.dependientes = [...panel.querySelectorAll('[data-tras]')];
       this.turno = 0;
-      this.hecha = false;
+      this.vista = false;
       this.escribiendo = d.createElement('div');
       this.escribiendo.className = 'escribiendo oculto';
       this.escribiendo.setAttribute('aria-hidden', 'true');
@@ -54,7 +57,7 @@
       const id = m.dataset.id;
       if (id) this.dependientes.forEach(el => { if (el.dataset.tras === id) el.classList.add('listo'); });
     }
-    reiniciar() {
+    vaciar() {
       this.turno++;
       this.mensajes.forEach(m => m.classList.add('oculto'));
       this.dependientes.forEach(el => el.classList.remove('listo'));
@@ -64,13 +67,13 @@
       this.turno++;
       this.escribiendo.classList.add('oculto');
       this.mensajes.forEach(m => this.mostrar(m, false));
-      this.hecha = true;
     }
     async reproducir() {
+      this.vista = true;
       if (estatico) { this.completa(); return; }
-      this.reiniciar();
+      this.vaciar();
       const mio = this.turno;
-      await espera(500);
+      await espera(450);
       for (const m of this.mensajes) {
         if (mio !== this.turno) return;
         const entra = m.classList.contains('msg--in');
@@ -83,73 +86,75 @@
           if (mio !== this.turno) return;
           this.escribiendo.classList.add('oculto');
         }
-        this.cuerpo.insertBefore(this.escribiendo, null);
         this.mostrar(m, true);
       }
-      this.hecha = true;
     }
   }
 
   const paneles = [...d.querySelectorAll('[role="tabpanel"]')];
   const conversaciones = new Map(paneles.map(p => [p, new Conversacion(p)]));
-  // sin interacción todavía: que se vean terminadas (por si no se llega a reproducir)
-  conversaciones.forEach(c => (estatico ? c.completa() : c.reiniciar()));
+  conversaciones.forEach(c => c.completa());
+  const enVista = el => { const r = el.getBoundingClientRect(); return r.height > 0 && r.top < innerHeight * 0.8 && r.bottom > innerHeight * 0.2; };
 
-  let seccionVisible = false;
-  const panelActivo = () => paneles.find(p => !p.hidden);
-  const reproducirActivo = () => { const p = panelActivo(); if (p) conversaciones.get(p).reproducir(); };
-
-  const ejemplos = d.getElementById('ejemplos');
-  if (!estatico && 'IntersectionObserver' in window && ejemplos) {
-    const ioChat = new IntersectionObserver(entradas => {
-      entradas.forEach(e => {
-        seccionVisible = e.isIntersecting;
-        if (!e.isIntersecting) return;
-        const p = panelActivo();
-        if (p && !conversaciones.get(p).hecha && conversaciones.get(p).turno <= 1) reproducirActivo();
-      });
-    }, { threshold: 0.35 });
-    paneles.forEach(p => ioChat.observe(p.querySelector('.telefono')));
+  if (!estatico && 'IntersectionObserver' in window) {
+    const enPantalla = new Set();
+    const deTelefono = t => conversaciones.get(t.closest('[role="tabpanel"]'));
+    // se acerca a la pantalla: se vacía mientras aún no se ve
+    const cerca = new IntersectionObserver(es => es.forEach(e => {
+      const c = deTelefono(e.target);
+      if (e.isIntersecting && !c.vista && !enPantalla.has(e.target)) c.vaciar();
+    }), { rootMargin: '0px 0px 35% 0px' });
+    // ya se ve: se reproduce (una vez)
+    const visible = new IntersectionObserver(es => es.forEach(e => {
+      const c = deTelefono(e.target);
+      if (e.isIntersecting) { enPantalla.add(e.target); if (!c.vista) c.reproducir(); }
+      else enPantalla.delete(e.target);
+    }), { threshold: 0.35 });
+    conversaciones.forEach(c => { cerca.observe(c.telefono); visible.observe(c.telefono); });
   }
 
   d.querySelectorAll('.repetir').forEach(b => b.addEventListener('click', () => {
-    const p = b.closest('[role="tabpanel"]');
-    conversaciones.get(p).reproducir();
+    conversaciones.get(b.closest('[role="tabpanel"]')).reproducir();
   }));
 
   /* ---------- pestañas ---------- */
+  const ejemplos = d.getElementById('ejemplos');
   const pestanas = [...d.querySelectorAll('[role="tab"]')];
   const activar = (pestana, enfocar) => {
+    let elegido = null;
     pestanas.forEach(t => {
       const sel = t === pestana;
       t.setAttribute('aria-selected', String(sel));
       t.tabIndex = sel ? 0 : -1;
       const panel = d.getElementById(t.getAttribute('aria-controls'));
+      const c = conversaciones.get(panel);
       if (sel) {
         panel.hidden = false;
         panel.classList.remove('entra-panel'); void panel.offsetWidth; panel.classList.add('entra-panel');
+        elegido = c;
       } else {
         panel.hidden = true;
-        conversaciones.get(panel).reiniciar();
-        conversaciones.get(panel).hecha = false;
+        c.completa();
+        c.vista = false;
       }
     });
     if (enfocar) pestana.focus();
     pestana.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: estatico ? 'auto' : 'smooth' });
-    const panel = d.getElementById(pestana.getAttribute('aria-controls'));
-    if (estatico) conversaciones.get(panel).completa();
-    else if (seccionVisible) conversaciones.get(panel).reproducir();
-    if (history.replaceState) history.replaceState(null, '', '#' + panel.id);
+    if (!estatico && elegido) {
+      if (enVista(elegido.telefono)) elegido.reproducir();
+      else { elegido.completa(); elegido.vista = false; }
+    }
+    try { history.replaceState(null, '', '#' + pestana.getAttribute('aria-controls')); } catch (e) { /* algunos marcos no lo permiten */ }
   };
   pestanas.forEach((t, i) => {
     t.addEventListener('click', () => activar(t, false));
     t.addEventListener('keydown', e => {
-      let j = null;
-      if (e.key === 'ArrowRight') j = (i + 1) % pestanas.length;
-      else if (e.key === 'ArrowLeft') j = (i - 1 + pestanas.length) % pestanas.length;
-      else if (e.key === 'Home') j = 0;
-      else if (e.key === 'End') j = pestanas.length - 1;
-      if (j !== null) { e.preventDefault(); activar(pestanas[j], true); }
+      let k = null;
+      if (e.key === 'ArrowRight') k = (i + 1) % pestanas.length;
+      else if (e.key === 'ArrowLeft') k = (i - 1 + pestanas.length) % pestanas.length;
+      else if (e.key === 'Home') k = 0;
+      else if (e.key === 'End') k = pestanas.length - 1;
+      if (k !== null) { e.preventDefault(); activar(pestanas[k], true); }
     });
   });
   // enlace directo a un ejemplo: #ejemplo-videos, #ejemplo-pedidos… (al cargar la página o desde un enlace de la propia página)
@@ -157,7 +162,7 @@
   const directo = pestanaDe(location.hash);
   if (directo) {
     activar(directo, false);
-    requestAnimationFrame(() => ejemplos.scrollIntoView({ behavior: 'auto' }));
+    requestAnimationFrame(() => ejemplos.scrollIntoView({ behavior: 'instant' }));
   }
   d.addEventListener('click', e => {
     const a = e.target.closest('a[href^="#ejemplo-"]');
@@ -165,7 +170,7 @@
     if (!t) return;
     e.preventDefault();
     activar(t, false);
-    ejemplos.scrollIntoView({ behavior: estatico ? 'auto' : 'smooth' });
+    ejemplos.scrollIntoView({ behavior: estatico ? 'instant' : 'smooth' });
   });
 
   /* ---------- WhatsApp (solo si hay número) ---------- */

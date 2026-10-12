@@ -11,6 +11,12 @@ Hecha a mano, sin librerías: HTML, CSS y un poco de JavaScript. No usa cookies 
 - `index.html?estatico` muestra todo ya terminado, sin animaciones (sirve para capturas).
 - `index.html#ejemplo-videos` (o `-reportes`, `-documentos`, `-pedidos`) abre directamente ese ejemplo.
 
+## Verla en el móvil (vista previa privada)
+
+Enlace privado de claude.ai (solo lo abre Salva con su cuenta): https://claude.ai/artifact/8BQSDgmPeaKoi5gA4PNnav
+Para actualizarlo tras un cambio: `python herramientas/vista_unica.py <salida.html>` y volver a publicar ese archivo en el mismo enlace.
+Es una copia de vista previa: no es la web publicada (no hay dominio todavía).
+
 ## Qué hay
 
 ```
@@ -21,7 +27,7 @@ assets/css/estilos.css
 assets/js/main.js     pestañas, chats animados, aparición al hacer scroll; arriba se pone el número de WhatsApp
 assets/fonts/         Outfit en woff2 (licencia OFL en la misma carpeta)
 assets/img/           logo, iconos e imagen para compartir (og.png)
-herramientas/         og.html (genera og.png) y marco_movil.html (para revisar el móvil)
+herramientas/         og.html (genera og.png), marco_movil.html (revisar el móvil) y vista_unica.py (un solo archivo para la vista previa)
 ```
 
 Marca: Outfit · negro `#12151A` · blanco · blanco cálido `#F6F3EE` · rosa `#F2788F` solo de acento · trato de usted.

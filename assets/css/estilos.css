@@ -78,7 +78,7 @@ h1, h2, h3, .remate, .cita p, .cabeza > p, .contacto__texto { text-wrap: balance
 .cabeza > p:not(.antetitulo) { margin-top: 22px; max-width: 640px; font-size: 19px; color: var(--gris); }
 
 /* ---------- cabecera ---------- */
-.cabecera { position: fixed; inset: 0 0 auto; z-index: 50; transition: background-color .6s var(--curva), box-shadow .6s var(--curva); }
+.cabecera { position: fixed; inset: 0 0 auto; z-index: 50; padding-top: env(safe-area-inset-top, 0px); transition: background-color .6s var(--curva), box-shadow .6s var(--curva); }
 .cabecera.is-scrolled { background: rgba(246, 243, 238, .86); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); box-shadow: 0 1px 0 var(--linea); }
 .cabecera__in { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 72px; }
 .logo { display: block; flex: none; border-radius: 4px; }
@@ -431,14 +431,14 @@ h1, h2, h3, .remate, .cita p, .cabeza > p, .contacto__texto { text-wrap: balance
 @media (max-width: 760px) { .pie__in { grid-template-columns: 1fr 1fr; } .pie__marca { grid-column: 1 / -1; } }
 
 /* ---------- aparición al hacer scroll ---------- */
-.js .revela { opacity: 0; transform: translateY(26px); transition: opacity 1s var(--curva) var(--d, 0s), transform 1.2s var(--curva) var(--d, 0s); }
-.js .revela.is-in { opacity: 1; transform: none; }
+.js .revela { transform: translateY(22px); transition: transform 1.2s var(--curva) var(--d, 0s); }
+.js .revela.is-in { transform: none; }
 
 /* ---------- movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-  .js .revela { opacity: 1; transform: none; }
+  .js .revela { transform: none; }
   .flota { animation: none !important; }
 }
 
