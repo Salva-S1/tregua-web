@@ -35,7 +35,7 @@ Los ejemplos (chats, reporte, vídeo, presupuesto, hoja) son maquetas hechas con
 
 ## Antes de publicar (decisiones de Salva)
 
-1. **Dominio y alojamiento.** Recomendado: comprar el dominio y alojar gratis en Cloudflare Pages o GitHub Pages. Nada publicado todavía.
+1. **Dominio.** PUBLICADA gratis el 12/10 en GitHub Pages: https://salva-s1.github.io/tregua-web/ (repo público). Falta comprar dominio propio y apuntarlo aquí.
 2. **WhatsApp:** poner el número en `assets/js/main.js` (`const WHATSAPP = ''`) para que aparezca el botón.
 3. **Aviso legal y privacidad:** completar titular, NIF, domicilio y alojamiento; revisarlo con una gestoría.
 4. **Confirmar lo que la web promete:** primera conversación sin coste · primera semana acompañada · los datos de cada cliente no se mezclan · precio por escrito antes de empezar.
