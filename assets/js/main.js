@@ -152,12 +152,21 @@
       if (j !== null) { e.preventDefault(); activar(pestanas[j], true); }
     });
   });
-  // enlace directo a un ejemplo: #ejemplo-videos, #ejemplo-pedidos…
-  const directo = location.hash && pestanas.find(t => '#' + t.getAttribute('aria-controls') === location.hash);
+  // enlace directo a un ejemplo: #ejemplo-videos, #ejemplo-pedidos… (al cargar la página o desde un enlace de la propia página)
+  const pestanaDe = hash => hash && pestanas.find(t => '#' + t.getAttribute('aria-controls') === hash);
+  const directo = pestanaDe(location.hash);
   if (directo) {
     activar(directo, false);
     requestAnimationFrame(() => ejemplos.scrollIntoView({ behavior: 'auto' }));
   }
+  d.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#ejemplo-"]');
+    const t = a && pestanaDe(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    activar(t, false);
+    ejemplos.scrollIntoView({ behavior: estatico ? 'auto' : 'smooth' });
+  });
 
   /* ---------- WhatsApp (solo si hay número) ---------- */
   const botonWa = d.getElementById('boton-whatsapp');
