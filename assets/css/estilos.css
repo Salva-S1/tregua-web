@@ -395,17 +395,24 @@ h1, h2, h3, .remate, .cita p, .cabeza > p, .contacto__texto { text-wrap: balance
 .enlace-claro:hover { text-decoration-color: var(--rosa); }
 @media (max-width: 860px) { .caso { grid-template-columns: 1fr; } }
 
-/* ---------- sus datos (seguridad) ---------- */
-.datos { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+/* ---------- sus datos (protección de datos): la hoja del compromiso ---------- */
+.datos { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
 .datos .cabeza { position: sticky; top: 110px; }
-.cabeza > p.datos__nota { margin-top: 24px; padding: 16px 18px; border-radius: 16px; background: #fff; border: 1px solid var(--linea); font-size: 15.5px; line-height: 1.5; }
-.datos__nota b { color: var(--tinta); }
-.garantias { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; border-top: 1px solid var(--linea-2); }
-.garantias li { display: flex; gap: 14px; align-items: flex-start; padding: 22px 0; border-bottom: 1px solid var(--linea); }
-.garantias h3 { margin-top: 2px; font-size: 17px; font-weight: 500; line-height: 1.25; letter-spacing: -.005em; }
-.garantias p { margin-top: 4px; font-size: 15px; line-height: 1.45; color: var(--gris); }
-@media (max-width: 900px) { .datos { grid-template-columns: 1fr; } .datos .cabeza { position: static; } }
-@media (max-width: 620px) { .garantias { grid-template-columns: 1fr; } }
+.leyes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.leyes li { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--linea-2); font-size: 14px; color: var(--gris); line-height: 1.3; }
+.leyes b { font-size: 17px; color: var(--tinta); font-weight: 600; }
+.compromiso { position: relative; padding: clamp(28px, 4vw, 44px); border-radius: 20px; background: #fff; box-shadow: var(--sombra); }
+.compromiso__linea { width: 36px; height: 3px; border-radius: 3px; background: var(--rosa); }
+.compromiso__etq { margin-top: 16px; font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); }
+.compromiso__tit { margin-top: 6px; font-size: clamp(24px, 2.4vw, 30px); font-weight: 400; line-height: 1.1; letter-spacing: -.02em; }
+.clausulas { margin-top: 22px; counter-reset: clausula; border-top: 1px solid var(--linea); }
+.clausulas li { counter-increment: clausula; display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--linea); }
+.clausulas li::before { content: counter(clausula) "."; grid-row: span 2; font-size: 15px; font-weight: 500; color: var(--rosa); font-variant-numeric: tabular-nums; line-height: 1.5; }
+.clausulas h4 { margin: 0; font-size: 15.5px; font-weight: 600; line-height: 1.4; }
+.clausulas p { margin-top: 2px; font-size: 14.5px; line-height: 1.5; color: var(--gris); }
+.compromiso__firma { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 26px; padding-top: 18px; border-top: 1px dashed var(--linea-2); font-size: 13px; color: var(--gris); }
+.compromiso__firma img { height: 20px; width: auto; flex: none; }
+@media (max-width: 900px) { .datos { grid-template-columns: 1fr; gap: 36px; } .datos .cabeza { position: static; } }
 .acordeon details p a { color: var(--tinta); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 
 /* ---------- preguntas ---------- */
