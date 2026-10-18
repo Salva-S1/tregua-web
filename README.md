@@ -38,5 +38,10 @@ Los ejemplos (chats, reporte, vídeo, presupuesto, hoja) son maquetas hechas con
 1. **Dominio.** PUBLICADA gratis el 12/10 en GitHub Pages: https://salva-s1.github.io/tregua-web/ (repo público). Falta comprar dominio propio y apuntarlo aquí.
 2. **WhatsApp:** poner el número en `assets/js/main.js` (`const WHATSAPP = ''`) para que aparezca el botón.
 3. **Aviso legal y privacidad:** completar titular, NIF, domicilio y alojamiento; revisarlo con una gestoría.
-4. **Confirmar lo que la web promete:** primera conversación sin coste · primera semana acompañada · los datos de cada cliente no se mezclan · precio por escrito antes de empezar.
-5. **Caso real:** que la empresa del caso (anonimizada) esté de acuerdo en que se cuente, y revisar las cifras (45 min por reporte, ~25 eventos al mes).
+4. **Confirmar lo que la web promete:** primera conversación sin coste · primera semana acompañada · los datos de cada cliente no se mezclan · precio por escrito antes de empezar · como mucho tres cosas nuevas que aprender · un resumen mensual (qué hizo, qué falló, qué se arregló, horas ahorradas) para quien tenga mantenimiento · **precios «desde» (propuesta del 18/10, sacada del análisis de mercado v4): informe US$ 150, automatización US$ 500, mantenimiento US$ 100/mes · el informe se descuenta si después se hace el trabajo · se paga por partes, a medida que se entrega.**
+6. **Países:** desde el 18/10 la web no nombra España ni Perú (solo «trabajamos en remoto»), salvo las leyes de datos que se cumplen (RGPD y Ley 29733) y la AEPD en la privacidad. El ejemplo de presupuesto sigue en euros con IVA 21 %.
+5. **Caso real:** permiso de la empresa para contarlo, dado (Salva, 18/10). Falta revisar las cifras con ella (45 min por reporte, ~25 eventos al mes).
+
+## Idea central (desde el 18/10)
+
+«La IA se adapta a su forma de trabajar, no al revés.» Está en la portada, en el bloque «Nuestro enfoque» (lo habitual frente a tregua.), en «Lo que cambia para usted/su equipo» de cada ejemplo, en los 5 pasos de «Cómo trabajamos» y en tres preguntas para quien desconfía de la IA. Si algo de eso deja de ser verdad, corregir la web.
