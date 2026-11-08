@@ -508,3 +508,11 @@ h1, h2, h3, .cita p, .cabeza > p, .contacto__texto { text-wrap: balance; }
 .legal p, .legal li { margin-top: 12px; color: var(--gris); }
 .legal ul { list-style: disc; padding-left: 22px; }
 .legal .aviso { margin-top: 24px; padding: 16px 18px; border-radius: 14px; background: var(--rosa-suave); color: var(--tinta); }
+.legal ol { list-style: decimal; padding-left: 22px; }
+.legal a { text-decoration: underline; text-underline-offset: 2px; }
+.legal .tabla { margin-top: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.legal table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+.legal table:has(th:nth-child(4)) { min-width: 560px; }
+.legal th, .legal td { padding: 10px 12px 10px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--linea); color: var(--gris); }
+.legal th { color: var(--tinta); font-weight: 500; }
+.legal td:first-child { color: var(--tinta); }
